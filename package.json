@@ -1,5 +1,5 @@
 {
-  "name": "4wangyu.github.io",
+  "name": "oneuuuu.github.io",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/4wangyu/4wangyu.github.io.git"
+    "url": "git+https://github.com/oneuuuu/oneuuuu.github.io.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/4wangyu/4wangyu.github.io/issues"
+    "url": "https://github.com/oneuuuu/oneuuuu.github.io/issues"
   },
-  "homepage": "https://github.com/4wangyu/4wangyu.github.io#readme",
+  "homepage": "https://github.com/oneuuuu/oneuuuu.github.io#readme",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"
   }
