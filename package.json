@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/4wangyu/4wangyu.github.io#readme",
   "devDependencies": {
-    "@11ty/eleventy": "^0.11.1"
+    "@11ty/eleventy": "^3.1.2"
   }
 }
