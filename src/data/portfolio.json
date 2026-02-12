@@ -1,0 +1,49 @@
+{
+    "about": "I am a passionate software engineer focused on building cutting-edge frontend applications. I love exploring new technologies like WebGPU, WASM, and browser-side AI.",
+    "experience": [
+        {
+            "company": "Tech Innovators",
+            "role": "Senior Frontend Engineer",
+            "period": "2022 - Present",
+            "description": "Leading the development of a real-time collaboration platform using React and WebSockets. Optimized performance by 40%."
+        },
+        {
+            "company": "Web Solutions Inc.",
+            "role": "Frontend Developer",
+            "period": "2020 - 2022",
+            "description": "Built responsive web applications for various clients using Vue.js and Tailwind CSS."
+        }
+    ],
+    "projects": [
+        {
+            "name": "Local AI Chat",
+            "description": "A fully client-side chatbot using Transformers.js and RAG. Runs entirely in the browser with no backend.",
+            "technologies": [
+                "JavaScript",
+                "Transformers.js",
+                "WebGPU"
+            ]
+        },
+        {
+            "name": "Visualizer Web",
+            "description": "A high-performance data visualization tool built with D3.js and Canvas API.",
+            "technologies": [
+                "D3.js",
+                "Canvas",
+                "TypeScript"
+            ]
+        }
+    ],
+    "skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Vue.js",
+        "Node.js",
+        "Eleventy",
+        "CSS/HTML",
+        "WebGPU",
+        "WASM",
+        "Machine Learning"
+    ]
+}

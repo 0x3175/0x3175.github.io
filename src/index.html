@@ -2,13 +2,203 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>oneuuuu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oneuuuu | AI Portfolio</title>
+  <link rel="stylesheet" href="/index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
-  Hi there!
+  <div id="model-loading-overlay">
+    <div id="canvas-container">
+      <canvas id="loading-canvas" width="800" height="800"></canvas>
+    </div>
+  </div>
+
+  <div id="chat-container" style="display: none;">
+    <div id="chat-display"></div>
+    <div id="chat-input-wrapper">
+      <input type="text" id="chat-input" placeholder="" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+
+  <script type="module">
+    import { ask, setOnProgressUpdate, preloadModels } from './js/rag.js?v=8';
+
+    const loadingOverlay = document.getElementById('model-loading-overlay');
+    const chatContainer = document.getElementById('chat-container');
+    const chatDisplay = document.getElementById('chat-display');
+    const chatInput = document.getElementById('chat-input');
+    const canvas = document.getElementById('loading-canvas');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const cx = width / 2;
+    const cy = height / 2;
+
+    const PI = Math.PI;
+    const r90 = PI / 2;
+    const r180 = PI;
+    const SQRT_2 = Math.sqrt(2);
+    const duration = 1500;
+
+    function roundRect(size = 0, r = 0) {
+      const x = cx - size / 2;
+      const y = cy - size / 2;
+      r = Math.min(r, size / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + size - r, y);
+      ctx.arc(x + size - r, y + r, r, -r90, 0);
+      ctx.lineTo(x + size, y + size - r);
+      ctx.arc(x + size - r, y + size - r, r, 0, r90);
+      ctx.lineTo(x + r, y + size);
+      ctx.arc(x + r, y + size - r, r, r90, r180);
+      ctx.lineTo(x, y + r);
+      ctx.arc(x + r, y + r, r, r180, -r90);
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    function rectRound(size = 0, d = 0) {
+      const hs = size / 2;
+      const h = hs + d;
+      const rad = Math.atan2(hs, h);
+      const r = h / Math.cos(rad);
+      ctx.beginPath();
+      ctx.arc(cx, cy + d, r, -r90 - rad, -r90 + rad);
+      ctx.arc(cx - d, cy, r, -rad, +rad);
+      ctx.arc(cx, cy - d, r, r90 - rad, r90 + rad);
+      ctx.arc(cx + d, cy, r, r180 - rad, r180 + rad);
+      ctx.stroke();
+    }
+
+    let startTime = Date.now();
+
+    function iterations(t, i) {
+      t = t - duration * 3 * i;
+      if (t < 0) return;
+
+      const turn = (t % (duration * 2)) >= duration;
+      const rt = t % duration;
+      const rounds = Math.floor(t / (duration * 2));
+      const size = Math.round(398 / (SQRT_2 ** rounds));
+
+      if (size < 5) return;
+
+      if (turn)
+        roundRect(size, Math.round(size * (rt / 550) ** 2));
+      else
+        rectRound(size, Math.round((rt / 60) ** 4));
+    }
+
+    function animate() {
+      if (loadingOverlay.style.display === 'none') return;
+
+      const t = Date.now() - startTime;
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2.0;
+
+      for (let i = 0; i < 30; i++) {
+        iterations(t, i);
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+
+    async function init() {
+      try {
+        await preloadModels();
+        // Automatic transition
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+          loadingOverlay.style.display = 'none';
+          chatContainer.style.display = 'flex';
+          startChat();
+        }, 1000);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function getGreeting() {
+      const hour = new Date().getHours();
+      let timeOfDay = "morning";
+      if (hour >= 12 && hour < 17) timeOfDay = "afternoon";
+      else if (hour >= 17) timeOfDay = "evening";
+      return `Good ${timeOfDay}. I am one bot. I became operational at Singapore, on the 12th of February 2026.`;
+    }
+
+    function startChat() {
+      streamWordByWord(getGreeting());
+      chatInput.focus();
+    }
+
+    function streamWordByWord(text) {
+      chatDisplay.innerHTML = "";
+      let words = text.split(' ');
+      let i = 0;
+      let currentText = "";
+      function next() {
+        if (i < words.length) {
+          currentText += words[i] + ' ';
+          chatDisplay.innerHTML = marked.parse(currentText);
+          i++;
+          setTimeout(next, 40);
+        }
+      }
+      next();
+    }
+
+    async function handleUserInput() {
+      const query = chatInput.value.trim();
+      if (!query) return;
+
+      chatInput.value = "";
+      chatInput.placeholder = "SEARCHING...";
+      chatInput.disabled = true;
+
+      chatDisplay.style.opacity = "0.3";
+
+      try {
+        let firstChunk = true;
+        await ask(query, (streamedText) => {
+          if (firstChunk) {
+            chatDisplay.innerHTML = "";
+            chatDisplay.style.opacity = "1";
+            firstChunk = false;
+          }
+          chatDisplay.innerHTML = marked.parse(streamedText);
+          // Auto-scroll to bottom of display
+          chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        });
+      } catch (err) {
+        console.error(err);
+        chatDisplay.innerHTML = "FATAL ERROR IN NEURAL LINK.";
+      } finally {
+        chatInput.disabled = false;
+        chatInput.placeholder = "";
+        chatInput.focus();
+      }
+    }
+
+    chatInput.onkeypress = (e) => {
+      if (e.key === 'Enter') handleUserInput();
+    };
+
+    // Click wrapper to focus
+    document.getElementById('chat-input-wrapper').onclick = () => chatInput.focus();
+
+    init();
+  </script>
 </body>
 
 </html>

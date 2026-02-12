@@ -1,11 +1,13 @@
 {
   "name": "oneuuuu.github.io",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "npx @11ty/eleventy",
-    "start": "npx @11ty/eleventy --serve"
+    "start": "npx @11ty/eleventy --serve",
+    "generate-embeddings": "node scripts/generate_embeddings.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,8 @@
   "homepage": "https://github.com/oneuuuu/oneuuuu.github.io#readme",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.3.2"
   }
 }

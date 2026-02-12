@@ -1,0 +1,206 @@
+/* Global Vars and Reset */
+:root {
+    --bg-color: #000000;
+    --accent-color: #0070f3;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.4);
+    --separator-color: rgba(255, 255, 255, 0.05);
+    --flow-color: rgba(0, 112, 243, 0.8);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Antfu-inspired Loading Overlay */
+#model-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#canvas-container {
+    width: 400px;
+    height: 400px;
+    position: relative;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#model-status-subtle {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+}
+
+/* Minimalist Chat Interface */
+#chat-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 15%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#chat-display {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+}
+
+#chat-display::-webkit-scrollbar {
+    width: 2px;
+}
+
+#chat-display::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+}
+
+/* Markdown Styling */
+#chat-display p {
+    margin-bottom: 1rem;
+}
+
+#chat-display ul,
+#chat-display ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#chat-display li {
+    margin-bottom: 0.5rem;
+}
+
+#chat-display code {
+    background: #111;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--accent-color);
+}
+
+#chat-display pre {
+    background: #080808;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    border: 1px solid var(--separator-color);
+}
+
+#chat-display h1,
+#chat-display h2,
+#chat-display h3 {
+    color: var(--accent-color);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#chat-display strong {
+    color: var(--accent-color);
+}
+
+#chat-input-wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.terminal-cursor-indicator {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-right: 1.5rem;
+    margin-top: 0.4rem;
+    animation: blink 1s infinite step-end;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+#chat-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-family: inherit;
+    width: 100%;
+    outline: none;
+}
+
+/* Start Button */
+.game-btn {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 1rem 3rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    letter-spacing: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 3rem;
+    text-transform: uppercase;
+}
+
+.game-btn:hover {
+    background: var(--accent-color);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent-color);
+}
+
+@media (max-width: 768px) {
+    #chat-container {
+        padding: 0 5%;
+    }
+
+    #chat-display,
+    #chat-input {
+        font-size: 1.4rem;
+    }
+}
