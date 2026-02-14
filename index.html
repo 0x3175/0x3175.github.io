@@ -1,11 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>4wangyu</title>
-  </head>
-  <body>
-    Hi there!
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wang Yu's</title>
+  <link rel="stylesheet" href="/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+  <div id="model-loading-overlay">
+    <div id="canvas-container">
+      <canvas id="loading-canvas" width="800" height="800"></canvas>
+    </div>
+  </div>
+
+  <div id="chat-container" style="display: none;">
+    <div id="chat-display"></div>
+    <div id="chat-input-wrapper">
+      <input type="text" id="chat-input" placeholder="" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+
+  <script type="module">
+    import { ask, preloadModels } from './js/ai.js?v=9';
+    import { startLoadingAnimation } from './js/loader.js';
+
+    const loadingOverlay = document.getElementById('model-loading-overlay');
+    const chatContainer = document.getElementById('chat-container');
+    const chatDisplay = document.getElementById('chat-display');
+    const chatInput = document.getElementById('chat-input');
+
+    // Start the loading animation
+    startLoadingAnimation('loading-canvas', 'model-loading-overlay');
+
+    async function init() {
+      try {
+        await preloadModels();
+        // Automatic transition
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+          loadingOverlay.style.display = 'none';
+          chatContainer.style.display = 'flex';
+          startChat();
+        }, 1000);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function getGreeting() {
+      const hour = new Date().getHours();
+      let timeOfDay = "morning";
+      if (hour >= 12 && hour < 17) timeOfDay = "afternoon";
+      else if (hour >= 17) timeOfDay = "evening";
+      return `Good ${timeOfDay}. I am Wang Yu's AI assistant. What do you want to know about him?`;
+    }
+
+    function startChat() {
+      streamWordByWord(getGreeting());
+      chatInput.focus();
+    }
+
+    function streamWordByWord(text) {
+      chatDisplay.innerHTML = "";
+      let words = text.split(' ');
+      let i = 0;
+      let currentText = "";
+      function next() {
+        if (i < words.length) {
+          currentText += words[i] + ' ';
+          chatDisplay.innerHTML = marked.parse(currentText);
+          i++;
+          setTimeout(next, 40);
+        }
+      }
+      next();
+    }
+
+    async function handleUserInput() {
+      const query = chatInput.value.trim();
+      if (!query) return;
+
+      chatInput.value = "";
+      chatInput.placeholder = "...";
+      chatInput.disabled = true;
+
+      chatDisplay.style.opacity = "0.3";
+
+      try {
+        let firstChunk = true;
+        await ask(query, (streamedText) => {
+          if (firstChunk) {
+            chatDisplay.innerHTML = "";
+            chatDisplay.style.opacity = "1";
+            firstChunk = false;
+          }
+          chatDisplay.innerHTML = marked.parse(streamedText);
+          // Auto-scroll to bottom of display
+          chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        });
+      } catch (err) {
+        console.error(err);
+        chatDisplay.innerHTML = "FATAL ERROR IN NEURAL LINK.";
+      } finally {
+        chatInput.disabled = false;
+        chatInput.placeholder = "";
+        chatInput.focus();
+      }
+    }
+
+    chatInput.onkeypress = (e) => {
+      if (e.key === 'Enter') handleUserInput();
+    };
+
+    // Click wrapper to focus
+    document.getElementById('chat-input-wrapper').onclick = () => chatInput.focus();
+
+    init();
+  </script>
+</body>
+
 </html>
