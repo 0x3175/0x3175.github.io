@@ -1,13 +1,8 @@
-import { pipeline, env, TextStreamer } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.3.2';
-
-// Enable CPU fallback for embeddings if WebGPU is busy or fails
-env.allowLocalModels = true;
-env.useBrowserCache = true;
+import { pipeline, TextStreamer } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.3.2';
 
 let embeddingsData = null;
 let embedder = null;
 let generator = null;
-
 
 async function loadData() {
     if (!embeddingsData) {
@@ -80,7 +75,7 @@ self.onmessage = async (e) => {
             const messages = [
                 {
                     role: "system",
-                    content: "You are one bot. Use ONLY the provided context to answer questions about oneuuuu. If the answer is not in the context, politely say you don't know but offer to tell them about his skills or projects. Never mention 'Stack Overflow' or other generic sites. Context:\n" + context
+                    content: "You are Wang Yu. Always answer concisely. Use ONLY the provided context to answer questions about Wang Yu. If the answer is not in the context, politely say you don't know but offer to tell them about his skills or projects. Context:\n" + context
                 },
                 { role: "user", content: query }
             ];

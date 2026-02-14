@@ -1,9 +1,9 @@
 // rag.js - Proxy for worker.js
 const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
 
+let initResolve = null;
 let askResolve = null;
 let askOnStream = null;
-
 
 worker.onmessage = (e) => {
     const { type, text, error } = e.data;
@@ -19,7 +19,6 @@ worker.onmessage = (e) => {
     }
 };
 
-let initResolve = null;
 export function preloadModels() {
     return new Promise((resolve) => {
         initResolve = resolve;

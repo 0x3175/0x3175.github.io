@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
-    "generate-embeddings": "node scripts/generate_embeddings.js"
+    "embed": "node scripts/generate_embeddings.js"
   },
   "repository": {
     "type": "git",
