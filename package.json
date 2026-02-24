@@ -1,5 +1,5 @@
 {
-  "name": "oneuuuu.github.io",
+  "name": "0o1u.github.io",
   "version": "1.0.0",
   "type": "module",
   "description": "",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oneuuuu/oneuuuu.github.io.git"
+    "url": "git+https://github.com/0o1u/0o1u.github.io.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/oneuuuu/oneuuuu.github.io/issues"
+    "url": "https://github.com/0o1u/0o1u.github.io/issues"
   },
-  "homepage": "https://github.com/oneuuuu/oneuuuu.github.io#readme",
+  "homepage": "https://github.com/0o1u/0o1u.github.io#readme",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2"
   },

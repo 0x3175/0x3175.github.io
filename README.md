@@ -23,7 +23,7 @@ A minimalist personal portfolio featuring an integrated AI assistant, local RAG 
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/oneuuuu/oneuuuu.github.io.git
+   git clone https://github.com/0o1u/0o1u.github.io.git
    ```
 2. Install dependencies:
    ```bash
